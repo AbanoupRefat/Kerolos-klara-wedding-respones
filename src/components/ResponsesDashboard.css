@@ -13,7 +13,61 @@
   align-items: center;
   margin-bottom: 3rem;
   flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modern-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: color-mix(in srgb, var(--cream) 60%, transparent);
+  border: 1px solid var(--rose);
+  padding: 0.35rem 0.5rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(89, 22, 29, 0.08);
+}
+
+.modern-pagination .icon-btn {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  color: var(--rose-deep);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modern-pagination .icon-btn:hover:not(:disabled) {
+  background: var(--rose);
+  color: var(--cream);
+}
+
+.modern-pagination .icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.modern-pagination .page-pill {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--plum);
+  padding: 0 0.5rem;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .dashboard-title {
@@ -122,25 +176,14 @@
   white-space: pre-wrap;
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-.page-info {
-  font-family: var(--font-ui);
-  font-size: 0.9rem;
-  color: var(--plum);
-  letter-spacing: 0.05em;
-}
-
 @media (max-width: 600px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 }

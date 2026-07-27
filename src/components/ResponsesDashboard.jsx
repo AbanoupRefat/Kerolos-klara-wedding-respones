@@ -44,10 +44,27 @@ export default function ResponsesDashboard() {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2 className="dashboard-title">Guestbook Responses</h2>
-        <button className="btn-outline refresh-btn" onClick={fetchResponses} disabled={status === "loading"}>
-          <FiRefreshCw className={status === "loading" ? "spin" : ""} aria-hidden="true" />
-          Refresh
-        </button>
+        
+        <div className="header-actions">
+          {status === "success" && responses.length > 0 && (
+            <div className="modern-pagination">
+              <button className="icon-btn" onClick={handlePrev} disabled={page === 1} aria-label="Previous Page">
+                <FiChevronLeft aria-hidden="true" />
+              </button>
+              <div className="page-pill">
+                <span>{page}</span> / <span>{totalPages || 1}</span>
+              </div>
+              <button className="icon-btn" onClick={handleNext} disabled={page >= totalPages} aria-label="Next Page">
+                <FiChevronRight aria-hidden="true" />
+              </button>
+            </div>
+          )}
+
+          <button className="btn-outline refresh-btn" onClick={fetchResponses} disabled={status === "loading"}>
+            <FiRefreshCw className={status === "loading" ? "spin" : ""} aria-hidden="true" />
+            Refresh
+          </button>
+        </div>
       </div>
 
       {status === "loading" && <div className="status-message">Loading responses...</div>}
@@ -74,20 +91,6 @@ export default function ResponsesDashboard() {
                 </div>
                 <p className="response-message">{res.message || res.Message}</p>
               </div>
-            ))}
-          </div>
-
-          <div className="pagination">
-            <button className="btn-outline" onClick={handlePrev} disabled={page === 1}>
-              <FiChevronLeft aria-hidden="true" /> Prev
-            </button>
-            <span className="page-info">
-              Page {page} of {totalPages || 1}
-            </span>
-            <button className="btn-outline" onClick={handleNext} disabled={page >= totalPages}>
-              Next <FiChevronRight aria-hidden="true" />
-            </button>
-          </div>
         </>
       )}
     </div>
