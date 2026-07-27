@@ -91,6 +91,8 @@ export default function ResponsesDashboard() {
                 </div>
                 <p className="response-message">{res.message || res.Message}</p>
               </div>
+            ))}
+          </div>
         </>
       )}
     </div>
