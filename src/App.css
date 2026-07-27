@@ -18,8 +18,7 @@
 }
 
 html {
-  overflow: hidden;
-  touch-action: none;
+  overflow-x: hidden;
 }
 
 body {
@@ -28,7 +27,7 @@ body {
   color: var(--plum);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 img {
