@@ -22,7 +22,14 @@ export default function ResponsesDashboard() {
         throw new Error("Invalid response format. Google Script might not have doGet() yet.");
       }
 
-      setResponses(data.reverse()); // Newest first
+      // Filter out empty rows (where name and message are both blank)
+      const validResponses = data.filter(res => {
+        const hasName = (res.name || res.Name || "").toString().trim() !== "";
+        const hasMessage = (res.message || res.Message || "").toString().trim() !== "";
+        return hasName || hasMessage;
+      });
+
+      setResponses(validResponses.reverse()); // Newest first
       setStatus("success");
     } catch (error) {
       console.error(error);
