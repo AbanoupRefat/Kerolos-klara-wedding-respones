@@ -77,19 +77,17 @@ export default function ResponsesDashboard() {
             ))}
           </div>
 
-          {totalPages > 1 && (
-            <div className="pagination">
-              <button className="btn-outline" onClick={handlePrev} disabled={page === 1}>
-                <FiChevronLeft aria-hidden="true" /> Prev
-              </button>
-              <span className="page-info">
-                Page {page} of {totalPages}
-              </span>
-              <button className="btn-outline" onClick={handleNext} disabled={page === totalPages}>
-                Next <FiChevronRight aria-hidden="true" />
-              </button>
-            </div>
-          )}
+          <div className="pagination">
+            <button className="btn-outline" onClick={handlePrev} disabled={page === 1}>
+              <FiChevronLeft aria-hidden="true" /> Prev
+            </button>
+            <span className="page-info">
+              Page {page} of {totalPages || 1}
+            </span>
+            <button className="btn-outline" onClick={handleNext} disabled={page >= totalPages}>
+              Next <FiChevronRight aria-hidden="true" />
+            </button>
+          </div>
         </>
       )}
     </div>
