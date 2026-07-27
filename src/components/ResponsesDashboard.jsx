@@ -1,0 +1,97 @@
+import { useState, useEffect } from "react";
+import { FiChevronLeft, FiChevronRight, FiRefreshCw } from "react-icons/fi";
+import "./ResponsesDashboard.css";
+
+export default function ResponsesDashboard() {
+  const [responses, setResponses] = useState([]);
+  const [status, setStatus] = useState("loading"); // loading, success, error
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 12;
+
+  const fetchResponses = async () => {
+    setStatus("loading");
+    try {
+      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnHHw3fhpKvm5uf4rwelIBYiagXfqs0XCL18oIS8-6AnDARX_vedw86aNHKrRSfBjI/exec";
+      const response = await fetch(GOOGLE_SCRIPT_URL);
+      
+      const text = await response.text();
+      let data = [];
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        throw new Error("Invalid response format. Google Script might not have doGet() yet.");
+      }
+
+      setResponses(data.reverse()); // Newest first
+      setStatus("success");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
+
+  useEffect(() => {
+    fetchResponses();
+  }, []);
+
+  const totalPages = Math.ceil(responses.length / itemsPerPage);
+  const currentResponses = responses.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const handlePrev = () => setPage((p) => Math.max(1, p - 1));
+  const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
+
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h2 className="dashboard-title">Guestbook Responses</h2>
+        <button className="btn-outline refresh-btn" onClick={fetchResponses} disabled={status === "loading"}>
+          <FiRefreshCw className={status === "loading" ? "spin" : ""} aria-hidden="true" />
+          Refresh
+        </button>
+      </div>
+
+      {status === "loading" && <div className="status-message">Loading responses...</div>}
+      {status === "error" && (
+        <div className="status-message error">
+          Failed to load responses. Please ensure the Google Script has the `doGet` function added.
+        </div>
+      )}
+
+      {status === "success" && responses.length === 0 && (
+        <div className="status-message">No responses found yet.</div>
+      )}
+
+      {status === "success" && responses.length > 0 && (
+        <>
+          <div className="responses-grid">
+            {currentResponses.map((res, index) => (
+              <div key={index} className="response-card">
+                <div className="response-header">
+                  <h3 className="response-name">{res.name || "Guest"}</h3>
+                  <span className="response-date">
+                    {res.timestamp ? new Date(res.timestamp).toLocaleDateString() : ""}
+                  </span>
+                </div>
+                <p className="response-message">{res.message || res.Message}</p>
+              </div>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button className="btn-outline" onClick={handlePrev} disabled={page === 1}>
+                <FiChevronLeft aria-hidden="true" /> Prev
+              </button>
+              <span className="page-info">
+                Page {page} of {totalPages}
+              </span>
+              <button className="btn-outline" onClick={handleNext} disabled={page === totalPages}>
+                Next <FiChevronRight aria-hidden="true" />
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
